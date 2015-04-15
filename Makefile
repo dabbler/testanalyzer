@@ -58,6 +58,11 @@ TARGET        = out/photon
 
 
 first: all
+
+test: all
+	./test-analyzer.sh ~/proj/physionet.org/physiobank/database/mitdb
+	./test-analyzer.sh ~/proj/physionet.org/physiobank/database/nstdb
+
 ####### Implicit rules
 
 .SUFFIXES: .o .c .cpp .cc .cxx .C
