@@ -32,7 +32,6 @@ int readAndAnalyze( char * recName )
 	wfdbSignalInfo = ( WFDB_Siginfo * ) malloc( channel_count * sizeof( WFDB_Siginfo ) );
 	channel_count = isigopen( recName, wfdbSignalInfo, channel_count );
 	int samps_per_chan_per_sec = getifreq();
-	int signal_format_specifier = wfdbSignalInfo->fmt;
 	if ( wfdbSignalInfo->gain == 0 ) {
 		wfdbSignalInfo->gain = 200;
 	}
@@ -51,7 +50,7 @@ int readAndAnalyze( char * recName )
 	for ( long sampleCount = 0 ; getvec( samp ) > 0 ; sampleCount++ ) {
 
 		if ( (sampleCount % 10000) == 0 ) {
-			fprintf( stdout, "." );
+			// fprintf( stdout, "." );
 		}
 
 		int beatFound = analyzeNextSample( samp[0], NULL, NULL );
@@ -68,10 +67,11 @@ int readAndAnalyze( char * recName )
 			annot.time = sampleCount - beatFound;
 			putann( 0, &annot );
 			// fprintf( stdout, "\nDBG : beat found at pos %d \n", sampleCount - beatFound );
-			fprintf( stdout, " %d ", sampleCount - beatFound );
+			// fprintf( stdout, " %d ", sampleCount - beatFound );
 		}
 
 	}
 
 
+	return 0;
 }
