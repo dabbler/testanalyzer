@@ -89,7 +89,7 @@ $(TARGET):  $(OBJECTS)
 qmake_all: FORCE
 
 
-clean:compiler_clean 
+clean:
 	-$(DEL_FILE) $(OBJECTS)
 	-$(DEL_FILE) *~ core *.core
 
