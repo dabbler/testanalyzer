@@ -1,3 +1,5 @@
+*.sw?
 *.dbr
+results
 out
 tmp
