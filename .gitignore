@@ -3,3 +3,5 @@
 results
 out
 tmp
+EcgAnalyse.cpp
+EcgData.h
