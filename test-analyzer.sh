@@ -2,7 +2,8 @@
 
 PID=$$
 
-DBFOLDER=~/proj/physionet.org/physiobank/database/mitdb
+#DBFOLDER=~/proj/physionet.org/physiobank/database/mitdb
+DBFOLDER=~/proj/physionet.org/physiobank/database/edb
 
 if [ "$1" != "" ]; then
 	DBFOLDER=$1
@@ -14,12 +15,12 @@ mkdir -p $RESULTSDIR
 
 pushd $DBFOLDER >& /dev/null
 
-for i in [12]*.dat; do
+for i in [e12]*.dat; do
 
 	rec=$(echo $i | cut -d . -f 1)
 	echo -n "$rec "
 
-	~/proj/photon/trunk/out/photon $rec
+	~/proj/photon/out/photon $rec
 
 	bxb -r $rec -a atr dbr -l $RESULTSDIR/bxb-$PID-results.txt - >& /dev/null
 

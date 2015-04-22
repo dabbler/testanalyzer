@@ -1,0 +1,90 @@
+#############################################################################
+# Makefile for building: pbi2vx3.exe
+# Project:  photon
+#############################################################################
+
+MAKEFILE      = Makefile
+
+####### Compiler, tools and options
+
+CC            = i586-mingw32msvc-gcc
+CXX           = i586-mingw32msvc-g++
+DEFINES       = -Wno-unused
+CFLAGS        = -O2 -D_REENTRANT -Wall -W $(DEFINES)
+CXXFLAGS      = -O2 -D_REENTRANT -Wall -W $(DEFINES)
+INCPATH       = -I. -I./win-include
+LINK          = i586-mingw32msvc-g++
+LFLAGS        = -Wl,-O1
+LIBS          = $(SUBLIBS) -L.
+MKDIR         = mkdir -p
+
+####### Output directory
+
+OBJECTS_DIR   = tmp
+
+####### Files
+
+SOURCES       = main.cpp \
+		analyze.cpp \
+		EcgAnalyse.cpp
+
+OBJECTS       = tmp/main.o \
+		tmp/analyze.o \
+		tmp/EcgAnalyse.o \
+		win-lib/libwfdb.dll.a.10.5
+
+DESTDIR       = ./#avoid trailing-slash linebreak
+
+TARGET        = photon.exe
+
+
+first: all
+
+
+####### Implicit rules
+
+.SUFFIXES: .o .c .cpp .cc .cxx .C
+
+.cpp.o:
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o "$@" "$<"
+
+.cc.o:
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o "$@" "$<"
+
+.cxx.o:
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o "$@" "$<"
+
+.C.o:
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o "$@" "$<"
+
+.c.o:
+	$(CC) -c $(CFLAGS) $(INCPATH) -o "$@" "$<"
+
+####### Build rules
+
+all: Makefile.win $(TARGET)
+
+$(TARGET):  $(OBJECTS)  
+	$(LINK) $(LFLAGS) -o $(TARGET) $(OBJECTS) $(OBJCOMP) $(LIBS)
+
+folders :
+	@$(MKDIR) tmp
+
+qmake_all: FORCE
+
+clean:
+	-$(DEL_FILE) $(OBJECTS)
+	-$(DEL_FILE) *~ core *.core
+
+####### Compile
+
+tmp/main.o: folders main.cpp analyze.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o tmp/main.o main.cpp
+
+tmp/analyze.o: folders analyze.cpp analyze.h \
+		EcgData.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o tmp/analyze.o analyze.cpp
+
+tmp/EcgAnalyse.o: folders EcgAnalyse.cpp EcgData.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o tmp/EcgAnalyse.o EcgAnalyse.cpp
+
