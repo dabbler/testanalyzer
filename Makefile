@@ -12,7 +12,7 @@ CXX           = g++
 DEFINES       = 
 CFLAGS        = -m64 -pipe -O2 -D_REENTRANT -Wall -W -fPIE $(DEFINES)
 CXXFLAGS      = -m64 -pipe -O2 -D_REENTRANT -Wall -W -fPIE $(DEFINES)
-INCPATH       = -I. -Itmp/moc
+INCPATH       = -I.
 LINK          = g++
 LFLAGS        = -m64 -Wl,-O1
 LIBS          = $(SUBLIBS) -L. -L/usr/X11R6/lib64 -L/usr/lib/x86_64-linux-gnu -lwfdb -lpthread
@@ -90,9 +90,10 @@ $(TARGET):  $(OBJECTS)
 	@test -d out/ || mkdir -p out/
 	$(LINK) $(LFLAGS) -o $(TARGET) $(OBJECTS) $(OBJCOMP) $(LIBS)
 
+folders :
+	@mkdir -p tmp/release tmp/debug
 
 qmake_all: FORCE
-
 
 clean:
 	-$(DEL_FILE) $(OBJECTS)
@@ -111,14 +112,14 @@ version.h: FORCE
 
 ####### Compile
 
-tmp/release/main.o: main.cpp analyze.h
+tmp/release/main.o: folders main.cpp analyze.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o tmp/release/main.o main.cpp
 
-tmp/release/analyze.o: analyze.cpp analyze.h \
+tmp/release/analyze.o: folders analyze.cpp analyze.h \
 		EcgData.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o tmp/release/analyze.o analyze.cpp
 
-tmp/release/EcgAnalyse.o: EcgAnalyse.cpp EcgData.h
+tmp/release/EcgAnalyse.o: folders EcgAnalyse.cpp EcgData.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o tmp/release/EcgAnalyse.o EcgAnalyse.cpp
 
 
