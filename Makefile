@@ -44,10 +44,12 @@ OBJECTS_DIR   = tmp/release/
 
 SOURCES       = main.cpp \
 		analyze.cpp \
+		profiler.cpp \
 		EcgAnalyse.cpp
 
 OBJECTS       = tmp/release/main.o \
 		tmp/release/analyze.o \
+		tmp/release/profiler.o \
 		tmp/release/EcgAnalyse.o \
 
 QMAKE_TARGET  = photon
@@ -60,8 +62,11 @@ TARGET        = out/photon
 first: all
 
 test: all
+	@echo ''
 	./test-analyzer.sh ~/proj/physionet.org/physiobank/database/mitdb
+	@echo ''
 	./test-analyzer.sh ~/proj/physionet.org/physiobank/database/nstdb
+	@echo ''
 
 ####### Implicit rules
 
@@ -84,7 +89,7 @@ test: all
 
 ####### Build rules
 
-all: Makefile $(TARGET)
+all: $(TARGET)
 
 $(TARGET):  $(OBJECTS)  
 	@test -d out/ || mkdir -p out/
@@ -103,7 +108,7 @@ clean:
 ####### Sub-libraries
 
 distclean: clean
-	-$(DEL_FILE) out/$(TARGET) 
+	-$(DEL_FILE) $(TARGET) 
 
 
 version.h: FORCE
@@ -112,14 +117,16 @@ version.h: FORCE
 
 ####### Compile
 
-tmp/release/main.o: folders main.cpp analyze.h
+tmp/release/main.o: main.cpp analyze.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o tmp/release/main.o main.cpp
 
-tmp/release/analyze.o: folders analyze.cpp analyze.h \
-		EcgData.h
+tmp/release/analyze.o: analyze.cpp analyze.h EcgData.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o tmp/release/analyze.o analyze.cpp
 
-tmp/release/EcgAnalyse.o: folders EcgAnalyse.cpp EcgData.h
+tmp/release/profiler.o: profiler.cpp profiler.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o tmp/release/profiler.o profiler.cpp
+
+tmp/release/EcgAnalyse.o: EcgAnalyse.cpp EcgData.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o tmp/release/EcgAnalyse.o EcgAnalyse.cpp
 
 
